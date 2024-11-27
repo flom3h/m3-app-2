@@ -24,7 +24,8 @@ components:
     name: spacer_1
     properties: {height: 46}
     type: Spacer
-  - layout_properties: {grid_position: 'XSCTPA,ZQQZSL'}
+  - event_bindings: {click: button_1_click}
+    layout_properties: {grid_position: 'XSCTPA,ZQQZSL'}
     name: button_1
     properties: {background: 'theme:Primary', foreground: 'theme:Primary Container', text: button_1}
     type: Button

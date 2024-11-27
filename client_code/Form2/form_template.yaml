@@ -1,0 +1,27 @@
+components:
+- components:
+  - layout_properties: {grid_position: 'LNOHLQ,BNCDGO'}
+    name: label_1
+    properties: {}
+    type: Label
+  - event_bindings: {click: button_1_click}
+    layout_properties: {grid_position: 'OKADHA,VGMPQM'}
+    name: button_1
+    properties: {background: 'theme:Primary', foreground: 'theme:Primary Container', text: button_1}
+    type: Button
+  - layout_properties: {grid_position: 'OKADHA,IBVZWE'}
+    name: spacer_1
+    properties: {height: 32}
+    type: Spacer
+  layout_properties: {slot: default}
+  name: content_panel
+  properties: {}
+  type: ColumnPanel
+- layout_properties: {slot: nav-right}
+  name: navbar_links
+  properties: {}
+  type: FlowPanel
+container:
+  properties: {html: '@theme:standard-page.html'}
+  type: HtmlTemplate
+is_package: true
