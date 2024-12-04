@@ -7,11 +7,12 @@ from anvil.tables import app_tables
 
 
 class Form2(Form2Template):
-  def __init__(self, **properties):
+  def __init__(self, pare, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
-
+    self.label_1.text = pare
     # Any code you write here will run before the form opens.
 
   def button_1_click(self, **event_args):
     open_form('Form1')
+

@@ -14,6 +14,7 @@ class Form1(Form1Template):
     # Any code you write here will run before the form opens.
 
   def button_1_click(self, **event_args):
-    print(anvil.server.call('get_user', self.text_box_1.text, self.text_box_2.text))
-    open_form('Form2')
+    pare = anvil.server.call('get_user', self.text_box_1.text, self.text_box_2.text)
+    print(pare)
+    open_form('Form2', pare)
     

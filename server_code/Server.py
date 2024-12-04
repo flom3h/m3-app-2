@@ -24,7 +24,7 @@ def get_user(username, password):
   conn =  con = sqlite3.connect(data_files["SQL_Injection_database.db"])
   cursor = conn.cursor()
   try:
-    res = list(cursor.execute(f"SELECT username FROM Users WHERE username = '{username}' AND password = '{password}'"))
+    res = cursor.execute(f"SELECT username FROM Users WHERE username = '{username}' AND password = '{password}'")
     if res:
       return True, f"SELECT username FROM Users WHERE username = '{username}' AND password = '{password}'"
     else:
