@@ -15,6 +15,11 @@ class Form1(Form1Template):
 
   def button_1_click(self, **event_args):
     pare = anvil.server.call('get_user', self.text_box_1.text, self.text_box_2.text)
-    print(pare)
-    open_form('Form2', pare)
+    if pare[0]:
+      status = "Login succesful"
+    else:
+      status = "Login failed!"
+      
+    print(pare[1])
+    open_form('Form2', status, pare[1])
     
