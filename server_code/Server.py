@@ -14,20 +14,23 @@ def get_login_state():
   return anvil.server.session["login"]
 @anvil.server.callable
 
-def get_user(username, passwort):
-  conn = sqlite3.connect(data_files["database.db"])
-  cursor =  conn.cursor()
-  try:
-      res = cursor.execute(f"SELECT username FROM Users WHERE username = '{username}' AND password = '{passwort}'")
-      result = cursor.fetchone()
-      if result:
-        res = "Login successful"
-        anvil.server.session["login"] = True
-      else:
-        raise ValueError("Empty Data")
-  except Exception:
-      res = f"Login not successful: \n SELECT username FROM Users WHERE username = '{username}' AND password = '{passwort}'"
-  return res
+@anvil.server.callable
+def get_user(username, password):
+    conn = sqlite3.connect(data_files["database.db"])
+    cursor = conn.cursor()
+    try:
+        query = "SELECT username FROM Users WHERE username = ? AND password = ?"
+        cursor.execute(query, (username, password))
+        result = cursor.fetchone()
+        
+        if result and result[0] == username:
+            anvil.server.session["login"] = True
+            return "Login successful"
+        else:
+            return "Invalid username or password."
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
 
 @anvil.server.callable
 def get_query_params(url):
