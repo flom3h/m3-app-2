@@ -22,16 +22,19 @@ def get_user(username, password):
         return False, str(e)  # Handle exceptions gracefully
 
 @anvil.server.callable
-def get_all_users(username, password):
-    conn = sqlite3.connect(data_files["SQL_Injection_database.db"])
-    cursor = conn.cursor()
-    try:
-        query = f"SELECT username, balance FROM Users WHERE {account_condition}"
-        cursor.execute(query)
-        rows = cursor.fetchall()
-        return rows  # Return the query results as a list of tuples
-    except Exception as e:
-        return str(e)  # Return error message for debugging
-    finally:
-        conn.close()  # Close the database connection
-
+def get_query_params(url):
+  query = url.split('?')[-1] if '?' in url else ''
+  query = urllib.parse.parse_qs(query)
+  return query
+  
+@anvil.server.callable
+def get_data_accountno(accountno):
+  conn = sqlite3.connect(data_files["database.db"])
+  cursor = conn.cursor()
+  querybalance = f"SELECT balance FROM Balances WHERE AccountNo = {accountno}"
+  queryusername = f"SELECT username FROM Users WHERE AccountNo = {accountno}"
+  
+  try:
+   return list(cursor.execute(querybalance)) + list(cursor.execute(queryusername))
+  except:
+    return ""
