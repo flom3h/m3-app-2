@@ -8,19 +8,26 @@ import sqlite3
 import urllib.parse
 
 @anvil.server.callable
-def get_user(username, password):
-    conn = sqlite3.connect(data_files["SQL_Injection_database.db"])
-    cursor = conn.cursor()
-    try:
-        query = f"SELECT username FROM Users WHERE username = '{username}' AND password = '{password}'"
-        res = cursor.execute(query)
-        rows = cursor.fetchall()  # Fetch all matching rows
-        if rows:  # Check if any rows were returned
-            return True, query  # Return success and the query
-        else:
-            return False, query  # Return failure and the query
-    except Exception as e:
-        return False, str(e)  # Handle exceptions gracefully
+def get_login_state():
+  if "login" not in anvil.server.session:
+    anvil.server.session["login"] = False
+  return anvil.server.session["login"]
+@anvil.server.callable
+
+def get_user(username, passwort):
+  conn = sqlite3.connect(data_files["database.db"])
+  cursor =  conn.cursor()
+  try:
+      res = cursor.execute(f"SELECT username FROM Users WHERE username = '{username}' AND password = '{passwort}'")
+      result = cursor.fetchone()
+      if result:
+        res = "Login successful"
+        anvil.server.session["login"] = True
+      else:
+        raise ValueError("Empty Data")
+  except Exception:
+      res = f"Login not successful: \n SELECT username FROM Users WHERE username = '{username}' AND password = '{passwort}'"
+  return res
 
 @anvil.server.callable
 def get_query_params(url):
@@ -32,10 +39,14 @@ def get_query_params(url):
 def get_data_accountno(accountno):
   conn = sqlite3.connect(data_files["database.db"])
   cursor = conn.cursor()
-  querybalance = f"SELECT balance FROM Balances WHERE AccountNo = {accountno}"
-  queryusername = f"SELECT username FROM Users WHERE AccountNo = {accountno}"
+  queryacct = f"SELECT balance FROM Balances WHERE AccountNo = {accountno}"
+  queryusr = f"SELECT username FROM Users WHERE AccountNo = {accountno}"
   
   try:
-   return list(cursor.execute(querybalance)) + list(cursor.execute(queryusername))
+   return list(cursor.execute(queryacct)) + list(cursor.execute(queryusr))
   except:
     return ""
+
+@anvil.server.callable
+def logout():
+  anvil.server.session["login"] = False

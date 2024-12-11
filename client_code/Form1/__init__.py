@@ -10,16 +10,20 @@ class Form1(Form1Template):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
-
     # Any code you write here will run before the form opens.
+    state = anvil.server.call('get_login_state')
+    if state is True:
+      open_form('Form2')
+
 
   def button_1_click(self, **event_args):
-    pare = anvil.server.call('get_user', self.text_box_1.text, self.text_box_2.text)
-    if pare[0]:
-      status = "Login succesful"
-    else:
-      status = "Login failed!"
-      
-    print(pare[1])
-    open_form('Form2', status, pare[1])
+    username = self.text_box_1.text
+    passwort = self.text_box_2.text
+    Form2 = open_form('Form2')
+    Form2.label_1.text =  anvil.server.call("get_user",username, passwort)
+
+  def check_box_1_change(self, **event_args):
+    
+    pass
+
     
